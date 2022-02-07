@@ -1,0 +1,172 @@
+﻿@model CourseManagementInCore.Models.ViewModels.TrainerVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Trainer View Model</h4>
+<hr />
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white">
+            <h4>Add Trainer</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" enctype="multipart/form-data">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TrainerName" class="control-label"></label>
+                            <input asp-for="TrainerName" class="form-control" />
+                            <span asp-validation-for="TrainerName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="DateOfBirth" class="control-label"></label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date"/>
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TrainerContact" class="control-label"></label>
+                            <input asp-for="TrainerContact" class="form-control"/>
+                            <span asp-validation-for="TrainerContact" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TrainerEmail" class="control-label"></label>
+                            <input asp-for="TrainerEmail" class="form-control" />
+                            <span asp-validation-for="TrainerEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group form-check">
+                            <label asp-for="IsActive" class="control-label"></label>
+                            <input asp-for="IsActive" class="form-control" />
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CourseID" class="control-label"></label>
+                            <select asp-for="CourseID" class="form-control" asp-items="ViewBag.CourseID"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TrainerImage" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="ImageUrl" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            <span asp-validation-for="TrainerImage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row col-md-12">
+                    <table id="moduleInfo" class="table table-responsive table-sm">
+                        <thead>
+                            <tr>
+                                <th>Designation</th>
+                                <th>Institution</th>
+                                <th>Experience (Years)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.TrainerExperiences.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.EditorFor(x => x.TrainerExperiences[i].Designation, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TrainerExperiences[i].Institution, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TrainerExperiences[i].ExperienceInYears, new { htmlAttribute = new { @class = "form-control", type = "date" } })
+                                    </td>
+                                    
+                                    <td>
+                                        <button id="btndummy-@i" type="button" class="btn btn-sm invisible">Dummy</button>
+                                        <button id="btnAdd-@i" type="button" class="btn btn-secondary visible" style="left:90%; position:absolute" onclick="AddItem(this)">Add</button>
+                                        <button id="btnRemove-@i" type="button" class="btn btn-sm btn-danger invisible" onclick="DeleteItem(this)">Remove</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="hdnLastIndex" value="0" />
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript">
+    // For Showing the FileName on Select
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+    function DeleteItem(btn) {
+        $(btn).closest('tr').remove();
+    }
+
+    function AddItem(btn) {
+
+        var table = document.getElementById('moduleInfo');
+        var rows = table.getElementsByTagName('tr');
+
+        var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+        var lastrowIdx = document.getElementById('hdnLastIndex').value;
+
+        var nextrowIdx = eval(lastrowIdx) + 1;
+
+        document.getElementById('hdnLastIndex').value = nextrowIdx;
+
+        rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+
+        rowOuterHtml = rowOuterHtml.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+        rowOuterHtml = rowOuterHtml.replaceAll('-' + lastrowIdx, '-' + nextrowIdx);
+
+        var newRow = table.insertRow();
+        newRow.innerHTML = rowOuterHtml;
+
+        var btnAddId = btn.id;
+        var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
+
+        var delbtn = document.getElementById(btnDeleteId);
+        delbtn.classList.add("visible");
+        delbtn.classList.remove("invisible");
+
+        var addbtn = document.getElementById(btnAddId);
+        addbtn.classList.remove("visible");
+        addbtn.classList.add("invisible");
+    }
+
+</script>
+}

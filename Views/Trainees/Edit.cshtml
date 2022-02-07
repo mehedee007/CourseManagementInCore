@@ -1,0 +1,205 @@
+﻿@model CourseManagementInCore.Models.Trainee
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+
+<h1>Edit</h1>
+
+
+
+
+
+<h4>Trainee</h4>
+<hr />
+
+
+
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white">
+            <h4>Edit Trainee</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" asp-for="TraineeID" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TraineeName" class="control-label"></label>
+                            <input asp-for="TraineeName" class="form-control" />
+                            <span asp-validation-for="TraineeName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Gender" class="control-label"></label>
+                            <input asp-for="Gender" class="form-control" />
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="DOB" class="control-label"></label>
+                            <input asp-for="DOB" class="form-control" type="date" />
+                            <span asp-validation-for="DOB" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TraineeEmail" class="control-label"></label>
+                            <input asp-for="TraineeEmail" class="form-control" />
+                            <span asp-validation-for="TraineeEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TraineeContact" class="control-label"></label>
+                            <input asp-for="TraineeContact" class="form-control" />
+                            <span asp-validation-for="TraineeContact" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CourseID" class="control-label"></label>
+                            <select asp-for="CourseID" class="form-control" asp-items="ViewBag.CourseID"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TraineeImage" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="fileBase" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            <span asp-validation-for="TraineeImage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row col-md-12">
+                    <table id="moduleInfo" class="table table-responsive table-sm">
+                        <thead>
+                            <tr>
+                                <th>Module Name</th>
+                                <th>External Mark </th>
+                                <th>External Date</th>
+                                <th>Evidence Mark</th>
+                                <th>Evidence Date</th>
+                                <th>Pass/Fail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.TraineeModuleDescriptions.Count; i++)
+                            {
+                                @Html.HiddenFor(model => model.TraineeModuleDescriptions[i].ID)
+                                @Html.HiddenFor(model => model.TraineeModuleDescriptions[i].TraineeID)
+                                <tr>sS
+                                    <td>
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].ModuleName, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].ExternalMark, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].ExternalDate, new { htmlAttribute = new { @class = "form-control", type = "date" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].EvidenceMark, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].EvidenceDate, new { htmlAttribute = new { @class = "form-control", type = "date" } })
+                                    </td>
+                                    <td class="checkbox">
+                                        @Html.EditorFor(x => x.TraineeModuleDescriptions[i].IsPass, new { htmlAttribute = new { @class = "form-control" } })
+                                    </td>
+                                    <td>
+                                        <button id="btndummy-@i" type="button" class="btn btn-sm invisible">Dummy</button>
+                                        <button id="btnAdd-@i" type="button" class="btn btn-secondary visible" style="left:90%; position:absolute" onclick="AddItem(this)">Add</button>
+                                        <button id="btnRemove-@i" type="button" class="btn btn-sm btn-danger invisible" onclick="DeleteItem(this)">Remove</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="hdnLastIndex" value="0" />
+                </div>
+
+
+
+                @*<div class="form-group">
+            <label asp-for="TraineeImage" class="control-label"></label>
+            <input asp-for="TraineeImage" class="form-control" />
+            <span asp-validation-for="TraineeImage" class="text-danger"></span>
+        </div>*@
+
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    
+}
+
+<script>
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+    function DeleteItem(btn) {
+        $(btn).closest('tr').remove();
+    }
+
+    function AddItem(btn) {
+
+        var table = document.getElementById('moduleInfo');
+        var rows = table.getElementsByTagName('tr');
+
+        var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+        var lastrowIdx = document.getElementById('hdnLastIndex').value;
+
+        var nextrowIdx = eval(lastrowIdx) + 1;
+
+        document.getElementById('hdnLastIndex').value = nextrowIdx;
+
+        rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+
+        rowOuterHtml = rowOuterHtml.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+        rowOuterHtml = rowOuterHtml.replaceAll('-' + lastrowIdx, '-' + nextrowIdx);
+
+        var newRow = table.insertRow();
+        newRow.innerHTML = rowOuterHtml;
+
+        var btnAddId = btn.id;
+        var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
+
+        var delbtn = document.getElementById(btnDeleteId);
+        delbtn.classList.add("visible");
+        delbtn.classList.remove("invisible");
+
+        var addbtn = document.getElementById(btnAddId);
+        addbtn.classList.remove("visible");
+        addbtn.classList.add("invisible");
+    }
+</script>

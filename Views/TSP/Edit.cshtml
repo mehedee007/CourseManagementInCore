@@ -1,0 +1,59 @@
+﻿@model CourseManagementInCore.Models.TSP
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TSP</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TspID" />
+            <div class="form-group">
+                <label asp-for="TspName" class="control-label"></label>
+                <input asp-for="TspName" class="form-control" />
+                <span asp-validation-for="TspName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TspAddress" class="control-label"></label>
+                <input asp-for="TspAddress" class="form-control" />
+                <span asp-validation-for="TspAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TspContact" class="control-label"></label>
+                <input asp-for="TspContact" class="form-control" />
+                <span asp-validation-for="TspContact" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TspEmail" class="control-label"></label>
+                <input asp-for="TspEmail" class="form-control" />
+                <span asp-validation-for="TspEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrainerID" class="control-label"></label>
+                <select asp-for="TrainerID" class="form-control" asp-items="ViewBag.TrainerID"></select>
+                <span asp-validation-for="TrainerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseID" class="control-label"></label>
+                <select asp-for="CourseID" class="form-control" asp-items="ViewBag.CourseID"></select>
+                <span asp-validation-for="CourseID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
